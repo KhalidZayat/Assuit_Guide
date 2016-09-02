@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:background="@drawable/list_item_bac">
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_weight="0.2"
+        android:layout_height="50dp"
+        android:src="@drawable/navigate_previous"/>
+    <View
+        android:layout_width="3dp"
+        android:layout_height="match_parent"
+        android:background="#ffffff" />
+
+    <me.grantland.widget.AutofitTextView
+        android:id="@+id/department"
+        android:layout_width="0dp"
+        android:layout_weight="0.8"
+        android:textColor="#FFF"
+        android:paddingRight="10dp"
+        android:layout_gravity="center"
+        android:text="نساء و توليد"
+        android:layout_height="wrap_content" />
+    <View
+        android:layout_width="3dp"
+        android:layout_height="match_parent"
+        android:background="#ffffff" />
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_weight="0.2"
+        android:layout_height="50dp"
+        android:src="@drawable/quill"/>
+
+</LinearLayout>

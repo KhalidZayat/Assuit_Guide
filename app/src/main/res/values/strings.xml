@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">دليلك فى أسيوط</string>
+    <string name="title_activity_details"></string>
+    <string name="action_description">عن البرنامج</string>
+    <string name="hint_search">إبحث هنا</string>
+    <string name="title_activity_departments">دليلك فى أسيوط</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_departments_">Departments_Activity</string>
+</resources>

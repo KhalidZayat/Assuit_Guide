@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="5dp"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    card_view:cardCornerRadius="10dp"
+    >
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bac2"
+        android:layout_margin="5dp" >
+
+        <me.grantland.widget.AutofitTextView
+            android:id="@+id/name"
+            android:text="حمدى نجيب التﻻوى"
+            android:textStyle="bold"
+            android:layoutDirection="rtl"
+            android:textColor="#ffffff"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.15"
+            android:textSize="18sp"
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp"
+            android:gravity="fill"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#BABABA" />
+
+        <me.grantland.widget.AutofitTextView
+            android:id="@+id/address"
+            android:text="أسيوط شارع عبد المعز امام مركز اسيوط اﻻول بنادى الجامعة المصرية العربية"
+            android:layoutDirection="rtl"
+            android:textColor="#f1fdff"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".3"
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp"
+            android:gravity="fill"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#BABABA" />
+
+        <LinearLayout
+            android:id="@+id/buttonPanel"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.1"
+            android:layout_gravity="center_horizontal"
+            >
+
+            <me.grantland.widget.AutofitTextView
+                android:id="@+id/phone"
+                android:layout_marginLeft="10dp"
+                android:text="088695896"
+                android:textSize="15sp"
+                android:textColor="#abf5e3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.25"
+                android:maxLines="5"
+                android:layout_gravity="center" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="#BABABA" />
+
+            <ImageView
+                android:id="@+id/sms"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".25"
+                android:src="@drawable/email"
+                android:contentDescription="call" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="#BABABA" />
+
+            <ImageView
+                android:id="@+id/call"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".25"
+                android:src="@drawable/phone"
+                android:contentDescription="call"
+                />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="#BABABA" />
+
+
+            <ImageView
+                android:id="@+id/star"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".25"
+                android:src="@drawable/heart_outline"
+                android:contentDescription="Add to favorites" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>
