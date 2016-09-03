@@ -42,7 +42,6 @@ public class MainActivityFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
     }
 
     @Override
@@ -90,7 +89,6 @@ public class MainActivityFragment extends Fragment {
                             intent.putExtras(bundle);
                             startActivity(intent);
                         }
-
                     }
                     break;
 

@@ -3,11 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".Activity.MainActivity">
 
-    <item android:id="@+id/lable1"
-        android:title="@string/app_name"
-        app:showAsAction="always|withText"
-        />
-
     <item
         android:id="@+id/action_description"
         android:title="@string/action_description"
