@@ -42,6 +42,7 @@ public class MainActivityFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
     }
 
     @Override
@@ -60,6 +61,7 @@ public class MainActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View Root =  inflater.inflate(R.layout.fragment_main, container, false);
+
         grid = (GridView) Root.findViewById(R.id.grid);
         adapter = new GridAdapter(getContext());
         grid.setAdapter(adapter);

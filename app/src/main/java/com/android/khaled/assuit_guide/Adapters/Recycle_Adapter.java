@@ -1,8 +1,12 @@
 package com.android.khaled.assuit_guide.Adapters;
 
+
+import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.khaled.assuit_guide.Dialogs.SingleChoiceDialogFragment;
 import com.android.khaled.assuit_guide.Model.Model_Item;
 import com.android.khaled.assuit_guide.R;
 
@@ -22,8 +27,10 @@ import java.util.ArrayList;
 public class Recycle_Adapter extends RecyclerView.Adapter<Recycle_Adapter.ViewHolder>
 {
     private ArrayList<Model_Item> models;
+    public ArrayList<String> nums_list;
     Context context;
     String Phone_Number;
+    public String [] nums;
     boolean fav = false;
 
     public Recycle_Adapter(Context context , ArrayList<Model_Item> Data) {
@@ -80,10 +87,7 @@ public class Recycle_Adapter extends RecyclerView.Adapter<Recycle_Adapter.ViewHo
         viewHolder.call_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getPhoneNumber(position);
-                Intent intent = new Intent(Intent.ACTION_DIAL);
-                intent.setData(Uri.parse("tel:"+Phone_Number));
-                context.startActivity(intent);
+                makeCALL(position);
             }
         });
 
@@ -118,9 +122,43 @@ public class Recycle_Adapter extends RecyclerView.Adapter<Recycle_Adapter.ViewHo
         }
     }
 
-    public void getPhoneNumber(int position)    {
-        String [] nums =models.get(position).getPhone().split("/");
-        Phone_Number = nums[0];
+    public void makeCALL(int position)    {
+
+        FragmentManager manager = ((Activity) context).getFragmentManager();
+        SingleChoiceDialogFragment dialog = new SingleChoiceDialogFragment();
+
+        getItems(position);
+
+        if(nums_list.size() >1) {
+            Bundle bundle = new Bundle();
+            bundle.putStringArrayList(SingleChoiceDialogFragment.DATA, nums_list);     // Require ArrayList
+            bundle.putInt(SingleChoiceDialogFragment.SELECTED, 0);
+            dialog.setArguments(bundle);
+            dialog.show(manager, "Dialog");
+        }
+        else
+        {
+            Phone_Number = nums_list.get(0);
+            Intent intent = new Intent(Intent.ACTION_DIAL);
+            intent.setData(Uri.parse("tel:"+Phone_Number));
+            context.startActivity(intent);
+        }
+    }
+
+    private void getItems(int position)
+    {
+
+        nums =models.get(position).getPhone().split("/");
+        nums_list = new ArrayList<>();
+        for(int i=0;i<nums.length;i++)
+        {
+            nums[i] = nums[i].trim();
+            if(nums[i].length() == 7)
+                nums_list.add("088"+nums[i]);
+            else
+                nums_list.add(nums[i]);
+        }
+        return ;
     }
 
     private void shareTextUrl(int position) {
@@ -131,7 +169,12 @@ public class Recycle_Adapter extends RecyclerView.Adapter<Recycle_Adapter.ViewHo
         // Add data to the intent, the receiving app will decide
         // what to do with it.
         share.putExtra(Intent.EXTRA_SUBJECT, "دليلك فى أسيوط");
-        String data = "الاسم // " +models.get(position).getName()+"\n\nالعنوان // "+ models.get(position).getAddress()+"\n\n رقم الهاتف // "+ models.get(position).getPhone();
+        getItems(position);
+        String data = "الاسم // " +models.get(position).getName()+"\n\nالعنوان // "+ models.get(position).getAddress()+"\n\n رقم الهاتف // "+nums_list.get(0);
+        for(int i =1 ; i< nums_list.size();i++)
+        {
+            data+="\n\n رقم الهاتف // "+nums_list.get(i);
+        }
         share.putExtra(Intent.EXTRA_TEXT, data);
         context.startActivity(Intent.createChooser(share, "Share link!"));
     }
