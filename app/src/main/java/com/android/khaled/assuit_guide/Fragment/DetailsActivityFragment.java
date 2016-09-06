@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.android.khaled.assuit_guide.Activity.DetailsActivity;
 import com.android.khaled.assuit_guide.Adapters.Recycle_Adapter;
+import com.android.khaled.assuit_guide.DataBase.Favorite_Adapter;
 import com.android.khaled.assuit_guide.Json.Json_Response;
 import com.android.khaled.assuit_guide.Model.Model_Item;
 import com.android.khaled.assuit_guide.R;
@@ -52,6 +53,7 @@ public class DetailsActivityFragment extends Fragment {
     private int ID,Dep_ID;
     private Bundle bundle;
     private char type;
+    private Favorite_Adapter db;
     public DetailsActivityFragment() {
     }
 
@@ -106,8 +108,6 @@ public class DetailsActivityFragment extends Fragment {
                         return true; // Return true to expand action view
                     }
                 });
-
-        return;
     }
 
     @Override
@@ -116,17 +116,6 @@ public class DetailsActivityFragment extends Fragment {
         setHasOptionsMenu(true);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        int id = item.getItemId();
-
-        if (id == R.id.action_description) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
@@ -187,27 +176,34 @@ public class DetailsActivityFragment extends Fragment {
         else if(ID == 5)
             call = request.getSemsars();
         else if(ID == 6)
-            call = request.getResturants();
+        {
+            db = new Favorite_Adapter(getContext(),"Model");
+            data = db.getModels();
+            R_Adapter = new Recycle_Adapter(getContext(), data,true);
+            recyclerView.setAdapter(R_Adapter);
+            progressBar.setVisibility(View.GONE);
+        }
         else if(ID == 7)
             call = request.getResturants();
         ////////////////////////////////////////////////////////////
-        call.enqueue(new Callback<Json_Response>() {
-            @Override
-            public void onResponse(Call<Json_Response> call, Response<Json_Response> response) {
+        if(call != null) {
+            call.enqueue(new Callback<Json_Response>() {
+                @Override
+                public void onResponse(Call<Json_Response> call, Response<Json_Response> response) {
+                    Json_Response jsonResponse = response.body();
+                    data = new ArrayList<>(Arrays.asList(jsonResponse.getData()));
+                    R_Adapter = new Recycle_Adapter(getContext(), data,false);
+                    recyclerView.setAdapter(R_Adapter);
+                    progressBar.setVisibility(View.GONE);
+                }
 
-                Json_Response jsonResponse = response.body();
-                data = new ArrayList<>(Arrays.asList(jsonResponse.getData()));
-                R_Adapter = new Recycle_Adapter(getContext(),data);
-                recyclerView.setAdapter(R_Adapter);
-                progressBar.setVisibility(View.GONE);
-            }
+                @Override
+                public void onFailure(Call<Json_Response> call, Throwable t) {
 
-            @Override
-            public void onFailure(Call<Json_Response> call, Throwable t) {
-
-                Toast.makeText(getContext(),"Can't Get Data",Toast.LENGTH_SHORT);
-            }
-        });
+                    Toast.makeText(getContext(), "Can't Get Data", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
     private ArrayList<Model_Item> filter(ArrayList<Model_Item> models, String query) {

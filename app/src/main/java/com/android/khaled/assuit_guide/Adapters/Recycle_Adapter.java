@@ -13,29 +13,29 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.android.khaled.assuit_guide.DataBase.Favorite_Adapter;
 import com.android.khaled.assuit_guide.Dialogs.SingleChoiceDialogFragment;
 import com.android.khaled.assuit_guide.Model.Model_Item;
 import com.android.khaled.assuit_guide.R;
 
 import java.util.ArrayList;
 
-/**
- * Created by khaled on 28/08/16.
- */
 public class Recycle_Adapter extends RecyclerView.Adapter<Recycle_Adapter.ViewHolder>
 {
     private ArrayList<Model_Item> models;
     public ArrayList<String> nums_list;
+    private Favorite_Adapter db;
     Context context;
     String Phone_Number;
     public String [] nums;
-    boolean fav = false;
+    boolean fav;
 
-    public Recycle_Adapter(Context context , ArrayList<Model_Item> Data) {
+    public Recycle_Adapter(Context context , ArrayList<Model_Item> Data,boolean f) {
         this.models = Data;
         this.context = context;
+        db = new Favorite_Adapter(context,"Model");
+        this.fav=f;
     }
 
     @Override
@@ -45,41 +45,42 @@ public class Recycle_Adapter extends RecyclerView.Adapter<Recycle_Adapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(final Recycle_Adapter.ViewHolder viewHolder, final int position) {
+    public void onBindViewHolder(final Recycle_Adapter.ViewHolder viewHolder, int position) {
 
-        viewHolder.Name.setText(models.get(position).getName());
-        viewHolder.Phone.setText(models.get(position).getPhone());
-        viewHolder.Address.setText(models.get(position).getAddress());
+        viewHolder.Name.setText(models.get(viewHolder.getAdapterPosition()).getName());
+        viewHolder.Phone.setText(models.get(viewHolder.getAdapterPosition()).getPhone());
+        viewHolder.Address.setText(models.get(viewHolder.getAdapterPosition()).getAddress());
 
         viewHolder.favorite_button.setClickable(true);
         viewHolder.call_button.setClickable(true);
         viewHolder.send_button.setClickable(true);
 
-        if(fav == false)
+        final Model_Item model_item = db.getModel(models.get(viewHolder.getAdapterPosition()).getName());
+        if(model_item.getName() == null)
         {
             viewHolder.favorite_button.setImageResource(R.drawable.heart_outline);
-            fav = false;
         }
 
         else
         {
             viewHolder.favorite_button.setImageResource(R.drawable.heart);
-            fav = true;
         }
 
         viewHolder.favorite_button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                if (fav == false) {
+            public void onClick(View v)
+            {
+                final Model_Item model_item = db.getModel(models.get(viewHolder.getAdapterPosition()).getName());
+
+                if (model_item.getName() == null) {
                     viewHolder.favorite_button.setImageResource(R.drawable.heart);
-                    Add_Item(position);
-                    fav = true;
-                    Toast.makeText(context, "Movi Added To Favorite List", Toast.LENGTH_SHORT).show();
+                    Add_Item(viewHolder.getAdapterPosition());
                 } else {
                     viewHolder.favorite_button.setImageResource(R.drawable.heart_outline);
-                    fav = false;
-                    Delete_Item(position);
-                    Toast.makeText(context, "Movi Removed From Favorite List", Toast.LENGTH_SHORT).show();
+                    if(!fav)
+                        Delete_Item(viewHolder.getAdapterPosition());
+                    else
+                        Delete_Favorite_Item(viewHolder.getAdapterPosition(),models.get(viewHolder.getAdapterPosition()).getName());
                 }
             }
         });
@@ -87,14 +88,14 @@ public class Recycle_Adapter extends RecyclerView.Adapter<Recycle_Adapter.ViewHo
         viewHolder.call_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                makeCALL(position);
+                makeCALL(viewHolder.getAdapterPosition());
             }
         });
 
         viewHolder.send_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                shareTextUrl(position);
+                shareTextUrl(viewHolder.getAdapterPosition());
             }
         });
     }
@@ -158,7 +159,6 @@ public class Recycle_Adapter extends RecyclerView.Adapter<Recycle_Adapter.ViewHo
             else
                 nums_list.add(nums[i]);
         }
-        return ;
     }
 
     private void shareTextUrl(int position) {
@@ -179,12 +179,19 @@ public class Recycle_Adapter extends RecyclerView.Adapter<Recycle_Adapter.ViewHo
         context.startActivity(Intent.createChooser(share, "Share link!"));
     }
 
-    private void Add_Item(int position)    {
-
+    private void Add_Item(int position)
+    {
+        db.save(models.get(position));
     }
 
     private void Delete_Item(int position)    {
+        db.deleteModel(models.get(position).getName());
+    }
 
+    private void Delete_Favorite_Item(int pos,String item)    {
+        db.deleteModel(item);
+        models.remove(pos);
+        setFilter(models);
     }
 
     //provide new dataset belong to search query

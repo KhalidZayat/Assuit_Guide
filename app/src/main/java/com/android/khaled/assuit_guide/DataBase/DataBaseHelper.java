@@ -4,16 +4,13 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-/**
- * Created by khaled on 06/04/16.
- */
 public class DataBaseHelper extends SQLiteOpenHelper {
 
     private SQLiteDatabase db;
     private static final String DATABASE_NAME = "AssuitGuide.db";
     private static final int DATABASE_VERSION = 1;
 
-    public static final String GUIDE_TABLE = "Movi";
+    public static final String GUIDE_TABLE = "Model";
     public static final String PHONE_COLUMN = "Phone";
     public static final String NAME_COLUMN = "Name";
     public static final String ADDRESS_COLUMN = "Address";
